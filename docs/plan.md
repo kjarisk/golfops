@@ -15,14 +15,14 @@
 - [x] Create apps/web/Dockerfile and apps/api/Dockerfile
 - [x] Create Nginx config: serve React dist, proxy /api/* to golfops-api
 - [x] Create .env.example with POSTGRES_USER, POSTGRES_PASSWORD, CLOUDFLARE_TUNNEL_TOKEN
-- [ ] `docker compose up -d --build` — all containers green
-- [ ] `curl localhost:8080/api/health` returns 200
+- [x] `docker compose up -d --build` — all containers green
+- [x] `curl localhost:8080/api/health` returns 200
 - [x] Document Cloudflare Tunnel setup in infra/cloudflare/README.md
-- [ ] Commit: "feat: add GolfOps full-stack Docker foundation"
+- [x] Commit: "feat: add GolfOps full-stack Docker foundation"
 
 ### Phase 1 — Activities core (first vertical slice)
 
-- [ ] Create `activities` table with Drizzle schema + migration
+- [x] Create `activities` table with Drizzle schema + migration
 - [ ] Add API routes: `GET /api/activities`, `POST /api/activities`, `PATCH /api/activities/:id`
 - [ ] Build activities list page in React (React Router route /activities)
 - [ ] Add activity form with validation (React Hook Form + Zod)

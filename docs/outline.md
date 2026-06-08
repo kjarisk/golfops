@@ -59,9 +59,9 @@ One internal user: Kjartan. Not a public application. Access protected by Cloudf
 
 ## Definition of Done (Release 1)
 
-- [ ] All six core flows work end-to-end
-- [ ] Loading, error, and empty states exist everywhere
-- [ ] Keyboard accessible throughout
-- [ ] Docker Compose stack starts cleanly with `docker compose up`
-- [ ] Live at golf.kjarisk.com via Cloudflare Tunnel
-- [ ] Protected by Cloudflare Access (Kjartan's email only)
+- [x] All six core flows work end-to-end
+- [x] Loading, error, and empty states exist everywhere
+- [x] Keyboard accessible throughout
+- [x] Docker Compose stack starts cleanly with `docker compose up`
+- [x] Live at golf.kjarisk.com via Cloudflare Tunnel
+- [x] Protected by Cloudflare Access (Kjartan's email only)

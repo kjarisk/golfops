@@ -63,13 +63,13 @@
 
 ## Milestone 6 — Polish and deploy
 
-- [ ] Accessibility audit (keyboard nav, aria labels, focus management)
-- [ ] Empty states for all data-driven UI
-- [ ] Visual polish against docs/visual-direction.md
-- [ ] docker compose production build passes clean
-- [ ] Cloudflare Tunnel live at golf.kjarisk.com
-- [ ] Cloudflare Access protecting the app (Kjartan's email only)
-- [ ] Commit and tag Release 1
+- [x] Accessibility audit (keyboard nav, aria labels, focus management)
+- [x] Empty states for all data-driven UI
+- [x] Visual polish against docs/visual-direction.md
+- [x] docker compose production build passes clean
+- [x] Cloudflare Tunnel live at golf.kjarisk.com
+- [x] Cloudflare Access protecting the app (Kjartan's email only)
+- [x] Commit and tag Release 1
 
 ## Future milestones (not in Release 1)
 

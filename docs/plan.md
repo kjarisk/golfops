@@ -23,7 +23,7 @@
 ### Phase 1 — Activities core (first vertical slice)
 
 - [x] Create `activities` table with Drizzle schema + migration
-- [ ] Add API routes: `GET /api/activities`, `POST /api/activities`, `PATCH /api/activities/:id`
+- [x] Add API routes: `GET /api/activities`, `POST /api/activities`, `PATCH /api/activities/:id`
 - [ ] Build activities list page in React (React Router route /activities)
 - [ ] Add activity form with validation (React Hook Form + Zod)
 - [ ] GolfBox checklist column: reservation required flag + completion checkbox + note

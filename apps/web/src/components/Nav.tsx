@@ -47,6 +47,19 @@ export function Nav() {
         >
           Drafts
         </NavLink>
+        <NavLink
+          to="/reports"
+          className={({ isActive }) =>
+            cn(
+              'text-sm transition-colors',
+              isActive
+                ? 'text-foreground font-medium'
+                : 'text-muted-foreground hover:text-foreground'
+            )
+          }
+        >
+          Reports
+        </NavLink>
       </div>
     </nav>
   )

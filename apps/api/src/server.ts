@@ -10,6 +10,7 @@ import { activityTrainerRoutes } from './routes/activityTrainers'
 import { knowledgeRoutes } from './routes/knowledge'
 import { gmailRoutes } from './routes/gmail'
 import { draftRoutes } from './routes/drafts'
+import { reportRoutes } from './routes/reports'
 
 const app = Fastify({ logger: true })
 
@@ -43,6 +44,7 @@ await app.register(activityTrainerRoutes)
 await app.register(knowledgeRoutes)
 await app.register(gmailRoutes)
 await app.register(draftRoutes)
+await app.register(reportRoutes)
 
 const port = Number(process.env.PORT ?? 3000)
 const host = process.env.HOST ?? '0.0.0.0'

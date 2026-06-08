@@ -1,0 +1,60 @@
+services:
+  golfops-db:
+    image: pgvector/pgvector:pg17
+    container_name: golfops-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: golfops
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - golfops-db-data:/var/lib/postgresql/data
+    networks:
+      - golfops-network
+
+  golfops-api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: golfops-api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@golfops-db:5432/golfops
+      NODE_ENV: production
+      PORT: "3000"
+    depends_on:
+      - golfops-db
+    networks:
+      - golfops-network
+
+  golfops-web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: golfops-web
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - golfops-api
+    networks:
+      - golfops-network
+
+  golfops-cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: golfops-cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - golfops-web
+    networks:
+      - golfops-network
+
+volumes:
+  golfops-db-data:
+
+networks:
+  golfops-network:
+    name: golfops-network

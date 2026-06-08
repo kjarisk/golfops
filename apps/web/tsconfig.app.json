@@ -26,7 +26,8 @@
 
     /* Path aliases */
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@golfops/shared": ["../../packages/shared/src/index.ts"]
     }
   },
   "include": ["src"]

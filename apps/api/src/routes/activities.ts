@@ -2,7 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { eq, asc } from 'drizzle-orm'
 import { db } from '../db/index'
-import { activities } from '../db/schema'
+import { activities, trainers, activityTrainers } from '../db/schema'
 
 const dateField = z.string().datetime().transform(s => new Date(s))
 
@@ -23,7 +23,28 @@ const PatchActivitySchema = CreateActivitySchema.partial()
 
 export async function activityRoutes(app: FastifyInstance) {
   app.get('/api/activities', async () => {
-    return db.select().from(activities).orderBy(asc(activities.startTime))
+    const allActivities = await db
+      .select()
+      .from(activities)
+      .orderBy(asc(activities.startTime))
+
+    if (allActivities.length === 0) return []
+
+    const assignments = await db
+      .select({
+        activityId: activityTrainers.activityId,
+        trainerId: trainers.id,
+        trainerName: trainers.name,
+      })
+      .from(activityTrainers)
+      .innerJoin(trainers, eq(activityTrainers.trainerId, trainers.id))
+
+    return allActivities.map(a => ({
+      ...a,
+      trainers: assignments
+        .filter(r => r.activityId === a.id)
+        .map(r => ({ id: r.trainerId, name: r.trainerName })),
+    }))
   })
 
   app.post('/api/activities', async (request, reply) => {

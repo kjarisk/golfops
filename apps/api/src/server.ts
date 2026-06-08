@@ -5,6 +5,8 @@ import { migrate } from 'drizzle-orm/postgres-js/migrator'
 import { db } from './db/index'
 import { healthRoutes } from './routes/health'
 import { activityRoutes } from './routes/activities'
+import { trainerRoutes } from './routes/trainers'
+import { activityTrainerRoutes } from './routes/activityTrainers'
 
 const app = Fastify({ logger: true })
 
@@ -33,6 +35,8 @@ for (let attempt = 1; attempt <= 5; attempt++) {
 await app.register(cors)
 await app.register(healthRoutes)
 await app.register(activityRoutes)
+await app.register(trainerRoutes)
+await app.register(activityTrainerRoutes)
 
 const port = Number(process.env.PORT ?? 3000)
 const host = process.env.HOST ?? '0.0.0.0'

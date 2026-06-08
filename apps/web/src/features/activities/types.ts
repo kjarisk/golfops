@@ -1,3 +1,8 @@
+export interface Trainer {
+  id: number
+  name: string
+}
+
 export interface Activity {
   id: number
   title: string
@@ -10,6 +15,7 @@ export interface Activity {
   requiresGolfboxReservation: boolean
   golfboxReservationCompleted: boolean
   golfboxReservationNote: string | null
+  trainers: Trainer[]
   createdAt: string
   updatedAt: string
 }

@@ -33,10 +33,10 @@
 
 ## Milestone 2 — Trainer allocation
 
-- [ ] Create `trainers` and `activity_trainers` tables + migrations
-- [ ] Trainer CRUD API
-- [ ] Trainer assignment UI on activity form
-- [ ] Show trainer coverage gaps on activities page
+- [x] Create `trainers` and `activity_trainers` tables + migrations
+- [x] Trainer CRUD API
+- [x] Trainer assignment UI on activity form
+- [x] Show trainer coverage gaps on activities page
 - [ ] Tests + commit
 
 ## Milestone 3 — Knowledge base

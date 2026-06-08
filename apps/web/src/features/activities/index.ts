@@ -1,2 +1,2 @@
 export { ActivitiesPage } from './components/ActivitiesPage'
-export type { Activity } from './types'
+export type { Activity, Trainer } from './types'

@@ -180,6 +180,9 @@ export function ActivitiesPage() {
                   <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wide text-muted-foreground">
                     Participants
                   </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    Trainers
+                  </th>
                   <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wide text-muted-foreground">
                     GolfBox
                   </th>
@@ -208,6 +211,24 @@ export function ActivitiesPage() {
                     <td className="px-4 py-3 text-center text-muted-foreground">
                       {activity.participantCount}
                       {activity.capacity != null ? `/${activity.capacity}` : ''}
+                    </td>
+                    <td className="px-4 py-3">
+                      {activity.trainers.length === 0 ? (
+                        <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                          Unassigned
+                        </span>
+                      ) : (
+                        <div className="flex flex-wrap gap-1">
+                          {activity.trainers.map((t) => (
+                            <span
+                              key={t.id}
+                              className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-foreground"
+                            >
+                              {t.name}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <GolfBoxCell

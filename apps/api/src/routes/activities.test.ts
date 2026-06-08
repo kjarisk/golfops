@@ -58,10 +58,17 @@ describe('GET /api/activities', () => {
     expect(res.json()).toEqual([])
   })
 
-  it('returns 200 with activities list', async () => {
-    mockDb.select.mockReturnValue({
+  it('returns 200 with activities list including trainers', async () => {
+    // First select: activities
+    mockDb.select.mockReturnValueOnce({
       from: vi.fn().mockReturnValue({
         orderBy: vi.fn().mockResolvedValue([mockActivity]),
+      }),
+    })
+    // Second select: activity_trainers join
+    mockDb.select.mockReturnValueOnce({
+      from: vi.fn().mockReturnValue({
+        innerJoin: vi.fn().mockResolvedValue([]),
       }),
     })
     const app = await buildApp()
@@ -69,6 +76,7 @@ describe('GET /api/activities', () => {
     expect(res.statusCode).toBe(200)
     expect(res.json()).toHaveLength(1)
     expect(res.json()[0].id).toBe(1)
+    expect(res.json()[0].trainers).toEqual([])
   })
 })
 

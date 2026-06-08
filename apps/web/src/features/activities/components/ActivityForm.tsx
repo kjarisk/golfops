@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   Sheet,
   SheetContent,
@@ -20,6 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useCreateActivity } from '../api/useActivities'
+import { useTrainers } from '../../trainers/api/useTrainers'
 
 const ACTIVITY_TYPES = [
   'VTG',
@@ -53,6 +56,9 @@ interface Props {
 
 export function ActivityForm({ open, onClose }: Props) {
   const create = useCreateActivity()
+  const { data: availableTrainers } = useTrainers()
+  const queryClient = useQueryClient()
+  const [selectedTrainerIds, setSelectedTrainerIds] = useState<number[]>([])
 
   const {
     register,
@@ -70,26 +76,38 @@ export function ActivityForm({ open, onClose }: Props) {
 
   function close() {
     reset()
+    setSelectedTrainerIds([])
     onClose()
   }
 
-  function onSubmit(values: FormValues) {
-    create.mutate(
-      {
+  async function onSubmit(values: FormValues) {
+    try {
+      const activity = await create.mutateAsync({
         ...values,
         startTime: new Date(values.startTime).toISOString(),
         endTime: values.endTime
           ? new Date(values.endTime).toISOString()
           : undefined,
-      },
-      {
-        onSuccess: () => {
-          toast.success('Activity added')
-          close()
-        },
-        onError: () => toast.error('Failed to save activity'),
+      })
+
+      if (selectedTrainerIds.length > 0) {
+        await Promise.all(
+          selectedTrainerIds.map((trainerId) =>
+            fetch(`/api/activities/${activity.id}/trainers`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ trainerId }),
+            })
+          )
+        )
+        await queryClient.invalidateQueries({ queryKey: ['activities'] })
       }
-    )
+
+      toast.success('Activity added')
+      close()
+    } catch {
+      toast.error('Failed to save activity')
+    }
   }
 
   return (
@@ -181,6 +199,37 @@ export function ActivityForm({ open, onClose }: Props) {
               placeholder="12"
             />
           </div>
+
+          {availableTrainers && availableTrainers.length > 0 && (
+            <div className="flex flex-col gap-2">
+              <Label>Trainers</Label>
+              <div className="flex flex-col gap-2 rounded-md border border-border p-3">
+                {availableTrainers.map((trainer) => (
+                  <div key={trainer.id} className="flex items-center gap-2">
+                    <input
+                      id={`trainer-${trainer.id}`}
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-border accent-primary cursor-pointer"
+                      checked={selectedTrainerIds.includes(trainer.id)}
+                      onChange={(e) =>
+                        setSelectedTrainerIds((prev) =>
+                          e.target.checked
+                            ? [...prev, trainer.id]
+                            : prev.filter((id) => id !== trainer.id)
+                        )
+                      }
+                    />
+                    <Label
+                      htmlFor={`trainer-${trainer.id}`}
+                      className="cursor-pointer font-normal"
+                    >
+                      {trainer.name}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="flex items-center gap-3">
             <input

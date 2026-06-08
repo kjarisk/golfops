@@ -56,10 +56,10 @@
 
 ## Milestone 5 — Basic reporting
 
-- [ ] Activity summary counts
-- [ ] Trainer hour totals
-- [ ] Participation trends (simple table or chart)
-- [ ] Tests + commit
+- [x] Activity summary counts
+- [x] Trainer hour totals
+- [x] Participation trends (simple table or chart)
+- [x] Tests + commit
 
 ## Milestone 6 — Polish and deploy
 

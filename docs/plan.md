@@ -26,10 +26,10 @@
 - [x] Add API routes: `GET /api/activities`, `POST /api/activities`, `PATCH /api/activities/:id`
 - [x] Build activities list page in React (React Router route /activities)
 - [x] Add activity form with validation (React Hook Form + Zod)
-- [ ] GolfBox checklist column: reservation required flag + completion checkbox + note
-- [ ] Loading, error, and empty states
-- [ ] API route tests
-- [ ] Commit stable slice
+- [x] GolfBox checklist column: reservation required flag + completion checkbox + note
+- [x] Loading, error, and empty states
+- [x] API route tests
+- [x] Commit stable slice
 
 ## Milestone 2 — Trainer allocation
 

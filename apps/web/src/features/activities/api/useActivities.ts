@@ -9,6 +9,7 @@ export type CreateActivityInput = {
   location?: string
   capacity?: number
   requiresGolfboxReservation?: boolean
+  golfboxReservationNote?: string
 }
 
 async function fetchActivities(): Promise<Activity[]> {

@@ -41,6 +41,7 @@ const schema = z.object({
     z.number().int().positive().optional()
   ),
   requiresGolfboxReservation: z.boolean(),
+  golfboxReservationNote: z.string().optional(),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -58,11 +59,14 @@ export function ActivityForm({ open, onClose }: Props) {
     handleSubmit,
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { requiresGolfboxReservation: false },
   })
+
+  const needsGolfbox = watch('requiresGolfboxReservation')
 
   function close() {
     reset()
@@ -192,6 +196,19 @@ export function ActivityForm({ open, onClose }: Props) {
               Requires GolfBox reservation
             </Label>
           </div>
+
+          {needsGolfbox && (
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="golfboxReservationNote">
+                Reservation note (optional)
+              </Label>
+              <Input
+                id="golfboxReservationNote"
+                {...register('golfboxReservationNote')}
+                placeholder="e.g. Call Ekebergbanen for large groups"
+              />
+            </div>
+          )}
 
           <SheetFooter className="mt-2 gap-2">
             <Button type="button" variant="outline" onClick={close}>

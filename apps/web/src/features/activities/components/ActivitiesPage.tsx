@@ -18,20 +18,35 @@ function formatDate(iso: string) {
 function GolfBoxCell({
   activity,
   onToggle,
+  onNoteChange,
   disabled,
 }: {
   activity: Activity
   onToggle: () => void
+  onNoteChange: (note: string) => void
   disabled: boolean
 }) {
+  const [editing, setEditing] = useState(false)
+  const [noteValue, setNoteValue] = useState(
+    activity.golfboxReservationNote ?? ''
+  )
+
   if (!activity.requiresGolfboxReservation) {
     return <span className="block text-center text-muted-foreground/30">—</span>
   }
 
   const done = activity.golfboxReservationCompleted
 
+  function saveNote() {
+    setEditing(false)
+    const trimmed = noteValue.trim()
+    if (trimmed !== (activity.golfboxReservationNote ?? '')) {
+      onNoteChange(trimmed)
+    }
+  }
+
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center gap-2">
       <button
         onClick={onToggle}
         disabled={disabled}
@@ -59,10 +74,32 @@ function GolfBoxCell({
           </svg>
         )}
       </button>
-      {activity.golfboxReservationNote && (
-        <span className="max-w-[12rem] truncate text-xs text-muted-foreground">
-          {activity.golfboxReservationNote}
-        </span>
+      {editing ? (
+        <input
+          autoFocus
+          value={noteValue}
+          onChange={(e) => setNoteValue(e.target.value)}
+          onBlur={saveNote}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') saveNote()
+            if (e.key === 'Escape') {
+              setNoteValue(activity.golfboxReservationNote ?? '')
+              setEditing(false)
+            }
+          }}
+          className="h-6 w-40 rounded border border-input bg-background px-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-ring"
+          placeholder="Add note…"
+        />
+      ) : (
+        <button
+          onClick={() => setEditing(true)}
+          title={activity.golfboxReservationNote ?? 'Add note'}
+          className="max-w-[10rem] truncate text-left text-xs text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:underline"
+        >
+          {activity.golfboxReservationNote || (
+            <span className="text-muted-foreground/40">+ note</span>
+          )}
+        </button>
       )}
     </div>
   )
@@ -183,6 +220,12 @@ export function ActivitiesPage() {
                               golfboxReservationCompleted:
                                 !activity.golfboxReservationCompleted,
                             },
+                          })
+                        }
+                        onNoteChange={(note) =>
+                          patch.mutate({
+                            id: activity.id,
+                            data: { golfboxReservationNote: note },
                           })
                         }
                       />

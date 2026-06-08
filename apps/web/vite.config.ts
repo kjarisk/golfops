@@ -6,6 +6,11 @@ import { resolve } from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    proxy: {
+      '/api': 'http://localhost:3000',
+    },
+  },
   resolve: {
     alias: {
       '@': resolve(import.meta.dirname, './src'),

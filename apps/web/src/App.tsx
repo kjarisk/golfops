@@ -1,8 +1,12 @@
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { ActivitiesPage } from './features/activities'
+
 function App() {
   return (
-    <div className="flex min-h-svh items-center justify-center bg-background">
-      <p className="text-muted-foreground text-sm">GolfOps</p>
-    </div>
+    <Routes>
+      <Route path="/" element={<Navigate to="/activities" replace />} />
+      <Route path="/activities" element={<ActivitiesPage />} />
+    </Routes>
   )
 }
 

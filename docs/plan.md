@@ -24,7 +24,7 @@
 
 - [x] Create `activities` table with Drizzle schema + migration
 - [x] Add API routes: `GET /api/activities`, `POST /api/activities`, `PATCH /api/activities/:id`
-- [ ] Build activities list page in React (React Router route /activities)
+- [x] Build activities list page in React (React Router route /activities)
 - [ ] Add activity form with validation (React Hook Form + Zod)
 - [ ] GolfBox checklist column: reservation required flag + completion checkbox + note
 - [ ] Loading, error, and empty states

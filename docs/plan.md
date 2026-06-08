@@ -48,11 +48,11 @@
 
 ## Milestone 4 — Gmail draft approvals
 
-- [ ] Gmail OAuth setup
-- [ ] Email polling and classification service
-- [ ] Draft creation API
-- [ ] Approval inbox UI: view drafts, approve or discard
-- [ ] Tests + commit
+- [x] Gmail OAuth setup
+- [x] Email polling and classification service
+- [x] Draft creation API
+- [x] Approval inbox UI: view drafts, approve or discard
+- [x] Tests + commit
 
 ## Milestone 5 — Basic reporting
 

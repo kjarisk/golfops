@@ -37,7 +37,7 @@
 - [x] Trainer CRUD API
 - [x] Trainer assignment UI on activity form
 - [x] Show trainer coverage gaps on activities page
-- [ ] Tests + commit
+- [x] Tests + commit
 
 ## Milestone 3 — Knowledge base
 

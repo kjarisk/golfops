@@ -1,6 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Activity } from '../types'
 
+export type CreateActivityInput = {
+  title: string
+  activityType: string
+  startTime: string
+  endTime?: string
+  location?: string
+  capacity?: number
+  requiresGolfboxReservation?: boolean
+}
+
 async function fetchActivities(): Promise<Activity[]> {
   const res = await fetch('/api/activities')
   if (!res.ok) throw new Error('Failed to fetch activities')
@@ -29,6 +39,25 @@ export function usePatchActivity() {
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<Activity> }) =>
       patchActivity(id, data),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['activities'] }),
+  })
+}
+
+async function createActivity(input: CreateActivityInput): Promise<Activity> {
+  const res = await fetch('/api/activities', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  })
+  if (!res.ok) throw new Error('Failed to create activity')
+  return res.json() as Promise<Activity>
+}
+
+export function useCreateActivity() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: createActivity,
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ['activities'] }),
   })

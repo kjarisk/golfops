@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { useActivities, usePatchActivity } from '../api/useActivities'
 import type { Activity } from '../types'
+import { ActivityForm } from './ActivityForm'
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString('nb-NO', {
@@ -97,6 +100,7 @@ function EmptyState() {
 export function ActivitiesPage() {
   const { data: activities, isLoading, error } = useActivities()
   const patch = usePatchActivity()
+  const [formOpen, setFormOpen] = useState(false)
 
   if (isLoading) return <LoadingState />
   if (error) return <ErrorState error={error as Error} />
@@ -113,7 +117,9 @@ export function ActivitiesPage() {
               {activities?.length ?? 0} upcoming
             </p>
           </div>
+          <Button onClick={() => setFormOpen(true)}>Add activity</Button>
         </div>
+        <ActivityForm open={formOpen} onClose={() => setFormOpen(false)} />
 
         {activities?.length === 0 ? (
           <EmptyState />

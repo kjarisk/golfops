@@ -7,6 +7,7 @@ import { healthRoutes } from './routes/health'
 import { activityRoutes } from './routes/activities'
 import { trainerRoutes } from './routes/trainers'
 import { activityTrainerRoutes } from './routes/activityTrainers'
+import { knowledgeRoutes } from './routes/knowledge'
 
 const app = Fastify({ logger: true })
 
@@ -37,6 +38,7 @@ await app.register(healthRoutes)
 await app.register(activityRoutes)
 await app.register(trainerRoutes)
 await app.register(activityTrainerRoutes)
+await app.register(knowledgeRoutes)
 
 const port = Number(process.env.PORT ?? 3000)
 const host = process.env.HOST ?? '0.0.0.0'

@@ -41,10 +41,10 @@
 
 ## Milestone 3 — Knowledge base
 
-- [ ] Create `knowledge_documents` table + migration
-- [ ] Admin pages: list, create, edit, delete documents
-- [ ] Categories: prices, opening hours, VTG process, banespill rules, trainer details, club info, FAQ
-- [ ] Tests + commit
+- [x] Create `knowledge_documents` table + migration
+- [x] Admin pages: list, create, edit, delete documents
+- [x] Categories: prices, opening hours, VTG process, banespill rules, trainer details, club info, FAQ
+- [x] Tests + commit
 
 ## Milestone 4 — Gmail draft approvals
 

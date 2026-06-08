@@ -44,3 +44,15 @@ export const activityTrainers = pgTable(
 )
 
 export type ActivityTrainer = typeof activityTrainers.$inferSelect
+
+export const knowledgeDocuments = pgTable('knowledge_documents', {
+  id: serial('id').primaryKey(),
+  title: varchar('title', { length: 255 }).notNull(),
+  category: varchar('category', { length: 100 }).notNull(),
+  content: text('content').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+export type KnowledgeDocument = typeof knowledgeDocuments.$inferSelect
+export type NewKnowledgeDocument = typeof knowledgeDocuments.$inferInsert

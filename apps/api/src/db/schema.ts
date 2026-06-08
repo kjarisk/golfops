@@ -56,3 +56,26 @@ export const knowledgeDocuments = pgTable('knowledge_documents', {
 
 export type KnowledgeDocument = typeof knowledgeDocuments.$inferSelect
 export type NewKnowledgeDocument = typeof knowledgeDocuments.$inferInsert
+
+export const oauthTokens = pgTable('oauth_tokens', {
+  id: serial('id').primaryKey(),
+  provider: varchar('provider', { length: 50 }).notNull().unique(),
+  accessToken: text('access_token').notNull(),
+  refreshToken: text('refresh_token').notNull(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+export const emailDrafts = pgTable('email_drafts', {
+  id: serial('id').primaryKey(),
+  subject: varchar('subject', { length: 255 }).notNull(),
+  to: varchar('to_address', { length: 255 }).notNull(),
+  body: text('body').notNull(),
+  status: varchar('status', { length: 20 }).notNull().default('pending'),
+  sourceThreadId: varchar('source_thread_id', { length: 255 }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+export type EmailDraft = typeof emailDrafts.$inferSelect
+export type NewEmailDraft = typeof emailDrafts.$inferInsert

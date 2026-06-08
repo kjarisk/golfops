@@ -165,25 +165,46 @@ export function ActivitiesPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-muted/40">
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground"
+                  >
                     Activity
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground"
+                  >
                     Type
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground"
+                  >
                     Date
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground"
+                  >
                     Location
                   </th>
-                  <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wide text-muted-foreground"
+                  >
                     Participants
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground"
+                  >
                     Trainers
                   </th>
-                  <th className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-center text-xs font-medium uppercase tracking-wide text-muted-foreground"
+                  >
                     GolfBox
                   </th>
                 </tr>

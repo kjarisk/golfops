@@ -89,16 +89,28 @@ export function ReportsPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-border bg-muted/40">
-                        <th className="px-4 py-2.5 text-left text-xs font-medium text-muted-foreground">
+                        <th
+                          scope="col"
+                          className="px-4 py-2.5 text-left text-xs font-medium text-muted-foreground"
+                        >
                           Type
                         </th>
-                        <th className="px-4 py-2.5 text-right text-xs font-medium text-muted-foreground">
+                        <th
+                          scope="col"
+                          className="px-4 py-2.5 text-right text-xs font-medium text-muted-foreground"
+                        >
                           This month
                         </th>
-                        <th className="px-4 py-2.5 text-right text-xs font-medium text-muted-foreground">
+                        <th
+                          scope="col"
+                          className="px-4 py-2.5 text-right text-xs font-medium text-muted-foreground"
+                        >
                           All time
                         </th>
-                        <th className="px-4 py-2.5 text-right text-xs font-medium text-muted-foreground">
+                        <th
+                          scope="col"
+                          className="px-4 py-2.5 text-right text-xs font-medium text-muted-foreground"
+                        >
                           Participants
                         </th>
                       </tr>
@@ -146,13 +158,22 @@ export function ReportsPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-border bg-muted/40">
-                        <th className="px-4 py-2.5 text-left text-xs font-medium text-muted-foreground">
+                        <th
+                          scope="col"
+                          className="px-4 py-2.5 text-left text-xs font-medium text-muted-foreground"
+                        >
                           Trainer
                         </th>
-                        <th className="px-4 py-2.5 text-right text-xs font-medium text-muted-foreground">
+                        <th
+                          scope="col"
+                          className="px-4 py-2.5 text-right text-xs font-medium text-muted-foreground"
+                        >
                           Activities
                         </th>
-                        <th className="px-4 py-2.5 text-right text-xs font-medium text-muted-foreground">
+                        <th
+                          scope="col"
+                          className="px-4 py-2.5 text-right text-xs font-medium text-muted-foreground"
+                        >
                           Hours
                         </th>
                       </tr>

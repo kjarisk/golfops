@@ -94,6 +94,8 @@ function DraftCard({
 
       <button
         onClick={() => setExpanded((e) => !e)}
+        aria-expanded={expanded}
+        aria-label={expanded ? 'Collapse message body' : 'Expand message body'}
         className="mt-3 w-full text-left text-xs text-muted-foreground hover:text-foreground transition-colors"
       >
         {expanded ? (

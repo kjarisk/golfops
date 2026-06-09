@@ -103,15 +103,49 @@ function EmptyState({ filtered }: { filtered: boolean }) {
   )
 }
 
+function highlightMatches(text: string, query: string) {
+  const terms = query
+    .trim()
+    .split(/\s+/)
+    .filter((t) => t.length > 1)
+  if (terms.length === 0) return text
+
+  const escaped = terms.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  const re = new RegExp(`(${escaped.join('|')})`, 'gi')
+  const lower = new Set(terms.map((t) => t.toLowerCase()))
+
+  return text.split(re).map((part, i) =>
+    lower.has(part.toLowerCase()) ? (
+      <mark key={i} className="rounded bg-primary/20 px-0.5 text-foreground">
+        {part}
+      </mark>
+    ) : (
+      part
+    )
+  )
+}
+
+function relevanceLabel(similarity: number): string {
+  if (similarity >= 0.6) return 'Strong match'
+  if (similarity >= 0.45) return 'Related'
+  return 'Loose match'
+}
+
 function SearchResults({
   results,
   isLoading,
+  isFetching,
   query,
+  onOpen,
 }: {
   results: SearchResult[] | undefined
   isLoading: boolean
+  isFetching: boolean
   query: string
+  onOpen: (id: number) => void
 }) {
+  // Only show the full-replace spinner before any results exist.
+  // On refetch, keepPreviousData keeps stale results visible (dimmed below).
   if (isLoading) {
     return (
       <div className="mt-4 rounded-xl border border-border bg-card px-5 py-4">
@@ -131,27 +165,34 @@ function SearchResults({
   }
 
   return (
-    <div className="mt-4 flex flex-col gap-2">
+    <div
+      className={cn(
+        'mt-4 flex flex-col gap-2 transition-opacity',
+        isFetching && 'opacity-60'
+      )}
+    >
       {results.map((r, i) => (
-        <div
-          key={i}
-          className="rounded-xl border border-border bg-card px-5 py-4"
+        <button
+          key={`${r.id}-${i}`}
+          type="button"
+          onClick={() => onOpen(r.id)}
+          className="group rounded-xl border border-border bg-card px-5 py-4 text-left transition-colors hover:border-primary/40 hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-sm font-medium text-foreground">
+            <span className="text-sm font-medium text-foreground group-hover:underline">
               {r.title}
             </span>
             <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
               {r.category}
             </span>
-            <span className="ml-auto text-xs text-muted-foreground tabular-nums">
-              {(r.similarity * 100).toFixed(0)}% match
+            <span className="ml-auto text-xs text-muted-foreground">
+              {relevanceLabel(r.similarity)}
             </span>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            {r.chunk}
+            {highlightMatches(r.chunk, query)}
           </p>
-        </div>
+        </button>
       ))}
     </div>
   )
@@ -175,8 +216,11 @@ export function KnowledgePage() {
     return () => clearTimeout(t)
   }, [searchInput])
 
-  const { data: searchResults, isFetching: searchLoading } =
-    useKnowledgeSearch(debouncedQuery)
+  const {
+    data: searchResults,
+    isLoading: searchInitialLoading,
+    isFetching: searchFetching,
+  } = useKnowledgeSearch(debouncedQuery)
 
   const isSearching = debouncedQuery.trim().length > 2
 
@@ -206,6 +250,16 @@ export function KnowledgePage() {
   function openEdit(doc: KnowledgeDocument) {
     setEditDoc(doc)
     setFormOpen(true)
+  }
+
+  function openFromSearch(id: number) {
+    const doc = documents?.find((d) => d.id === id)
+    if (doc) openEdit(doc)
+  }
+
+  function clearSearch() {
+    setSearchInput('')
+    setDebouncedQuery('')
   }
 
   function closeForm() {
@@ -246,22 +300,36 @@ export function KnowledgePage() {
           </Button>
         </div>
 
-        <div className="mb-5">
+        <div className="relative mb-5 max-w-xl">
           <Input
             type="search"
-            placeholder="Search knowledge base…"
+            placeholder="Search the knowledge base by meaning…"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="max-w-sm"
+            className="pr-9"
             aria-label="Search knowledge base"
           />
+          {searchInput && (
+            <button
+              type="button"
+              onClick={clearSearch}
+              aria-label="Clear search"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span aria-hidden className="block text-base leading-none">
+                ×
+              </span>
+            </button>
+          )}
         </div>
 
         {isSearching ? (
           <SearchResults
             results={searchResults}
-            isLoading={searchLoading}
+            isLoading={searchInitialLoading}
+            isFetching={searchFetching}
             query={debouncedQuery}
+            onOpen={openFromSearch}
           />
         ) : (
           <>

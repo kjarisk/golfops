@@ -1,4 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from '@tanstack/react-query'
 import type {
   KnowledgeDocument,
   KnowledgeCategory,
@@ -89,5 +94,6 @@ export function useKnowledgeSearch(query: string) {
     queryFn: () => searchKnowledge(query),
     enabled: query.trim().length > 2,
     staleTime: 30_000,
+    placeholderData: keepPreviousData,
   })
 }

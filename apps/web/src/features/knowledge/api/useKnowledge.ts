@@ -1,5 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import type { KnowledgeDocument, KnowledgeCategory } from '../types'
+import type {
+  KnowledgeDocument,
+  KnowledgeCategory,
+  SearchResult,
+} from '../types'
 
 type CreateInput = {
   title: string
@@ -68,5 +72,22 @@ export function useDeleteDocument() {
   return useMutation({
     mutationFn: deleteDocument,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['knowledge'] }),
+  })
+}
+
+async function searchKnowledge(query: string): Promise<SearchResult[]> {
+  const res = await fetch(
+    `/api/knowledge/search?q=${encodeURIComponent(query)}`
+  )
+  if (!res.ok) throw new Error('Search failed')
+  return res.json() as Promise<SearchResult[]>
+}
+
+export function useKnowledgeSearch(query: string) {
+  return useQuery({
+    queryKey: ['knowledge-search', query],
+    queryFn: () => searchKnowledge(query),
+    enabled: query.trim().length > 2,
+    staleTime: 30_000,
   })
 }

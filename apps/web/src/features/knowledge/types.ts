@@ -18,3 +18,11 @@ export interface KnowledgeDocument {
   createdAt: string
   updatedAt: string
 }
+
+export interface SearchResult {
+  id: number
+  title: string
+  category: string
+  chunk: string
+  similarity: number
+}

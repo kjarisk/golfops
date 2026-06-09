@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   Dialog,
   DialogContent,
@@ -9,9 +10,13 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog'
-import { useDocuments, useDeleteDocument } from '../api/useKnowledge'
+import {
+  useDocuments,
+  useDeleteDocument,
+  useKnowledgeSearch,
+} from '../api/useKnowledge'
 import { KNOWLEDGE_CATEGORIES } from '../types'
-import type { KnowledgeDocument } from '../types'
+import type { KnowledgeDocument, SearchResult } from '../types'
 import { DocumentForm } from './DocumentForm'
 
 function CategoryPills({
@@ -98,6 +103,60 @@ function EmptyState({ filtered }: { filtered: boolean }) {
   )
 }
 
+function SearchResults({
+  results,
+  isLoading,
+  query,
+}: {
+  results: SearchResult[] | undefined
+  isLoading: boolean
+  query: string
+}) {
+  if (isLoading) {
+    return (
+      <div className="mt-4 rounded-xl border border-border bg-card px-5 py-4">
+        <p className="text-sm text-muted-foreground">Searching…</p>
+      </div>
+    )
+  }
+  if (!results) return null
+  if (results.length === 0) {
+    return (
+      <div className="mt-4 rounded-xl border border-border bg-card px-5 py-4">
+        <p className="text-sm text-muted-foreground">
+          No results for &ldquo;{query}&rdquo;
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="mt-4 flex flex-col gap-2">
+      {results.map((r, i) => (
+        <div
+          key={i}
+          className="rounded-xl border border-border bg-card px-5 py-4"
+        >
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-sm font-medium text-foreground">
+              {r.title}
+            </span>
+            <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+              {r.category}
+            </span>
+            <span className="ml-auto text-xs text-muted-foreground tabular-nums">
+              {(r.similarity * 100).toFixed(0)}% match
+            </span>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {r.chunk}
+          </p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function KnowledgePage() {
   const { data: documents, isLoading, error } = useDocuments()
   const deleteDoc = useDeleteDocument()
@@ -108,6 +167,18 @@ export function KnowledgePage() {
   const [deleteTarget, setDeleteTarget] = useState<
     KnowledgeDocument | undefined
   >()
+  const [searchInput, setSearchInput] = useState('')
+  const [debouncedQuery, setDebouncedQuery] = useState('')
+
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(searchInput), 400)
+    return () => clearTimeout(t)
+  }, [searchInput])
+
+  const { data: searchResults, isFetching: searchLoading } =
+    useKnowledgeSearch(debouncedQuery)
+
+  const isSearching = debouncedQuery.trim().length > 2
 
   if (isLoading) {
     return (
@@ -175,54 +246,78 @@ export function KnowledgePage() {
           </Button>
         </div>
 
-        <div className="mb-4">
-          <CategoryPills active={activeCategory} onChange={setActiveCategory} />
+        <div className="mb-5">
+          <Input
+            type="search"
+            placeholder="Search knowledge base…"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="max-w-sm"
+            aria-label="Search knowledge base"
+          />
         </div>
 
-        <DocumentForm open={formOpen} onClose={closeForm} document={editDoc} />
-
-        {filtered.length === 0 ? (
-          <EmptyState filtered={activeCategory !== 'All'} />
+        {isSearching ? (
+          <SearchResults
+            results={searchResults}
+            isLoading={searchLoading}
+            query={debouncedQuery}
+          />
         ) : (
-          <div className="overflow-hidden rounded-xl border border-border bg-card">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border bg-muted/40">
-                  <th
-                    scope="col"
-                    className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground"
-                  >
-                    Title
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground"
-                  >
-                    Category
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground"
-                  >
-                    Content
-                  </th>
-                  <th scope="col" className="px-4 py-3" />
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {filtered.map((doc) => (
-                  <DocumentRow
-                    key={doc.id}
-                    doc={doc}
-                    onEdit={() => openEdit(doc)}
-                    onDelete={() => setDeleteTarget(doc)}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <div className="mb-4">
+              <CategoryPills
+                active={activeCategory}
+                onChange={setActiveCategory}
+              />
+            </div>
+
+            {filtered.length === 0 ? (
+              <EmptyState filtered={activeCategory !== 'All'} />
+            ) : (
+              <div className="overflow-hidden rounded-xl border border-border bg-card">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/40">
+                      <th
+                        scope="col"
+                        className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground"
+                      >
+                        Title
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground"
+                      >
+                        Category
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground"
+                      >
+                        Content
+                      </th>
+                      <th scope="col" className="px-4 py-3" />
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {filtered.map((doc) => (
+                      <DocumentRow
+                        key={doc.id}
+                        doc={doc}
+                        onEdit={() => openEdit(doc)}
+                        onDelete={() => setDeleteTarget(doc)}
+                      />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
         )}
       </div>
+
+      <DocumentForm open={formOpen} onClose={closeForm} document={editDoc} />
 
       <Dialog
         open={!!deleteTarget}

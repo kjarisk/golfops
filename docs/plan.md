@@ -71,9 +71,19 @@
 - [x] Cloudflare Access protecting the app (Kjartan's email only)
 - [x] Commit and tag Release 1
 
+## Milestone 7 — RAG (document chunking, embeddings, semantic search)
+
+- [x] Add `document_chunks` table (pgvector `vector(768)`) + migration 0004, enable `vector` extension
+- [x] Chunker: paragraph→sentence splitting with overlap (`lib/chunker.ts`)
+- [x] Ollama client for embeddinggemma:300m embeddings (`lib/ollama.ts`)
+- [x] Indexing service: `indexDocument` / `reindexAll` (`lib/embeddings.ts`)
+- [x] Auto-index documents on create/update (async, non-blocking)
+- [x] `GET /api/knowledge/search` (cosine similarity) + `POST /api/knowledge/reindex`
+- [x] Frontend: debounced search box + ranked results UI on KnowledgePage
+- [x] Lint + build + tests green, commit
+
 ## Future milestones (not in Release 1)
 
-- Milestone 7 — RAG: document chunking, embeddinggemma embeddings, pgvector semantic search
 - Milestone 8 — Acuity: appointment sync, availability lookup, webhooks
 - Milestone 9 — n8n: weekly reports, trainer emails, GolfBox reminders
 - Milestone 10 — Ollama: wire native models to knowledge base and drafts

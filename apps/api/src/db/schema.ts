@@ -1,4 +1,16 @@
-import { pgTable, serial, varchar, text, integer, boolean, timestamp, primaryKey } from 'drizzle-orm/pg-core'
+import { pgTable, serial, varchar, text, integer, boolean, timestamp, primaryKey, customType } from 'drizzle-orm/pg-core'
+
+const vector = customType<{ data: number[]; driverData: string; config: { dimensions: number } }>({
+  dataType(config) {
+    return `vector(${config?.dimensions ?? 768})`
+  },
+  toDriver(value: number[]): string {
+    return `[${value.join(',')}]`
+  },
+  fromDriver(value: string): number[] {
+    return value.slice(1, -1).split(',').map(Number)
+  },
+})
 
 export const activities = pgTable('activities', {
   id: serial('id').primaryKey(),
@@ -79,3 +91,14 @@ export const emailDrafts = pgTable('email_drafts', {
 
 export type EmailDraft = typeof emailDrafts.$inferSelect
 export type NewEmailDraft = typeof emailDrafts.$inferInsert
+
+export const documentChunks = pgTable('document_chunks', {
+  id: serial('id').primaryKey(),
+  documentId: integer('document_id')
+    .notNull()
+    .references(() => knowledgeDocuments.id, { onDelete: 'cascade' }),
+  chunkIndex: integer('chunk_index').notNull(),
+  content: text('content').notNull(),
+  embedding: vector('embedding', { dimensions: 768 }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+})

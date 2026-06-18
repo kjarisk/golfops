@@ -27,3 +27,17 @@ export interface TrainerRow {
   activity_count: number
   total_minutes: number
 }
+
+export interface HoursTypeRow {
+  activity_type: string
+  lessons: number
+  hours: number
+}
+
+export interface HoursReport {
+  from: string | null
+  to: string | null
+  byType: HoursTypeRow[]
+  totals: { lessons: number; hours: number }
+  range: { from_date: string | null; to_date: string | null }
+}

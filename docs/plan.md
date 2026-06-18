@@ -113,13 +113,13 @@
 
 ### Slice 3 — Charging: hours-to-invoice report
 
-- [ ] `GET /api/reports/hours?from=&to=` (sum durations, grouped by type, over `source='acuity'`)
-- [ ] Hours/Charging section in ReportsPage + CSV export
-- [ ] Tests + commit
+- [x] `GET /api/reports/hours?from=&to=` (sum durations, grouped by type, over `source='acuity'`)
+- [x] Hours/Charging section in ReportsPage + CSV export
+- [x] Tests + commit
 
 ### jgk-readiness
 
-- [ ] Export booking/hours Zod schemas + types from `packages/shared`
+- [x] Export booking/hours Zod schemas + types from `packages/shared`
 
 ## Future milestones (not in Release 1)
 

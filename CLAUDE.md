@@ -139,3 +139,9 @@ Do NOT read all docs speculatively — only read what the current task requires.
 ## Commands
 
 See `docs/QUICKSTART.md` for the full command list.
+
+## Shared platform
+
+@AGENTS.md
+See `../kjarni` for cross-app reusable capabilities. Query it only when a task benefits from prior
+work — never auto-scan other apps. Rule: this repo = workspace, Kjarni = library, other apps = references.

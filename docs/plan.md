@@ -82,8 +82,48 @@
 - [x] Frontend: debounced search box + ranked results UI on KnowledgePage
 - [x] Lint + build + tests green, commit
 
+## Milestone 8 — Acuity booking integration (operations core)
+
+> Acuity is source of truth; mirror into our DB. One booking system: synced lessons become
+> `activities` rows with `source='acuity'` (additive — manual rows unchanged). Charging = hours
+> to invoice the club, not customer payments. Google Calendar via Acuity's native sync.
+
+### Slice 0 — Foundation: Acuity client + sync
+
+- [x] `lib/acuity.ts` — typed Acuity client (Basic Auth via `ACUITY_USER_ID`/`ACUITY_API_KEY`)
+- [x] Migration 0005 — extend `activities`: `source`, `acuityId` (unique), client fields, `acuityTypeId`, `acuityCalendar`
+- [x] `lib/bookingSync.ts` — `syncBookings()` upsert appointments by `acuityId`
+- [x] `POST /api/bookings/sync` + ~5-min `setInterval` poll in `server.ts`
+- [x] `.env.example` + `compose.yml` Acuity vars
+- [x] Tests + commit
+
+### Slice 1 — Unified schedule view
+
+- [ ] Extend `GET /api/activities` mapper with new fields
+- [ ] Source badge + client name + source/date-range filter on activities UI
+- [ ] "Sync now" button → `POST /api/bookings/sync`
+- [ ] Tests + commit
+
+### Slice 2 — Availability + create booking
+
+- [ ] `GET /api/acuity/appointment-types`, `/availability/dates`, `/availability/times`
+- [ ] `POST /api/bookings` (create in Acuity → sync back)
+- [ ] New-booking dialog flow (type → date → time → client)
+- [ ] Tests + commit
+
+### Slice 3 — Charging: hours-to-invoice report
+
+- [ ] `GET /api/reports/hours?from=&to=` (sum durations, grouped by type, over `source='acuity'`)
+- [ ] Hours/Charging section in ReportsPage + CSV export
+- [ ] Tests + commit
+
+### jgk-readiness
+
+- [ ] Export booking/hours Zod schemas + types from `packages/shared`
+
 ## Future milestones (not in Release 1)
 
-- Milestone 8 — Acuity: appointment sync, availability lookup, webhooks
-- Milestone 9 — n8n: weekly reports, trainer emails, GolfBox reminders
-- Milestone 10 — Ollama: wire native models to knowledge base and drafts
+- Milestone 8.5 — Acuity webhooks for real-time sync (needs Cloudflare Access bypass for webhook path)
+- Milestone 9 — jgk.kjarisk.com syncs bookings from golfops
+- Milestone 10 — n8n: weekly reports, trainer emails, GolfBox reminders
+- Milestone 11 — Ollama: wire native models to knowledge base and drafts

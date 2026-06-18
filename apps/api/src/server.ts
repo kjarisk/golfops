@@ -11,6 +11,9 @@ import { knowledgeRoutes } from './routes/knowledge'
 import { gmailRoutes } from './routes/gmail'
 import { draftRoutes } from './routes/drafts'
 import { reportRoutes } from './routes/reports'
+import { bookingRoutes } from './routes/bookings'
+import { isAcuityConfigured } from './lib/acuity'
+import { syncBookings } from './lib/bookingSync'
 
 const app = Fastify({ logger: true })
 
@@ -45,6 +48,19 @@ await app.register(knowledgeRoutes)
 await app.register(gmailRoutes)
 await app.register(draftRoutes)
 await app.register(reportRoutes)
+await app.register(bookingRoutes)
+
+// Mirror Acuity bookings into our DB on a poll (Acuity is source of truth).
+// Webhooks would be lower-latency but require a Cloudflare Access bypass; polling is simpler.
+if (isAcuityConfigured()) {
+  const SYNC_INTERVAL_MS = Number(process.env.ACUITY_SYNC_INTERVAL_MS ?? 5 * 60 * 1000)
+  const runSync = () =>
+    syncBookings()
+      .then(r => app.log.info({ ...r }, 'Acuity booking sync complete'))
+      .catch(err => app.log.error(err, 'Acuity booking sync failed'))
+  runSync()
+  setInterval(runSync, SYNC_INTERVAL_MS).unref()
+}
 
 const port = Number(process.env.PORT ?? 3000)
 const host = process.env.HOST ?? '0.0.0.0'

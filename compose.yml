@@ -22,6 +22,8 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@golfops-db:5432/golfops
       NODE_ENV: production
       PORT: "3000"
+      ACUITY_USER_ID: ${ACUITY_USER_ID}
+      ACUITY_API_KEY: ${ACUITY_API_KEY}
     depends_on:
       - golfops-db
     networks:

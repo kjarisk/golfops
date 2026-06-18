@@ -24,6 +24,15 @@ export const activities = pgTable('activities', {
   requiresGolfboxReservation: boolean('requires_golfbox_reservation').default(false).notNull(),
   golfboxReservationCompleted: boolean('golfbox_reservation_completed').default(false).notNull(),
   golfboxReservationNote: text('golfbox_reservation_note'),
+  // Booking source: 'manual' (created in golfops) or 'acuity' (mirrored from Acuity Scheduling).
+  source: varchar('source', { length: 20 }).default('manual').notNull(),
+  // Acuity-synced fields (null for manual rows). acuityId is the upsert key.
+  acuityId: integer('acuity_id').unique(),
+  acuityTypeId: integer('acuity_type_id'),
+  acuityCalendar: varchar('acuity_calendar', { length: 255 }),
+  clientName: varchar('client_name', { length: 255 }),
+  clientEmail: varchar('client_email', { length: 255 }),
+  clientPhone: varchar('client_phone', { length: 50 }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 })

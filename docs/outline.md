@@ -43,11 +43,22 @@ One internal user: Kjartan. Not a public application. Access protected by Cloudf
 5. **Gmail draft approvals** — view generated email drafts, approve or discard before sending
 6. **Basic reporting** — activity counts, trainer hours, participation summary
 
+## Core flows (Release 2 — Milestone 8: Acuity bookings)
+
+7. **Bookings** — Acuity Scheduling is the source of truth for client lesson bookings; golfops mirrors
+   appointments into the `activities` table (`source='acuity'`) so there is **one booking system**.
+   - See all bookings alongside manual activities (unified schedule, source badge + filter)
+   - Book a lesson from golfops: pick appointment type → see availability → create in Acuity
+   - **Charging:** date-range report of Kjartan's lesson hours (to invoice the club), with CSV export.
+     Clients pay the club directly — golfops never tracks customer payments.
+   - Google Calendar sync handled by Acuity's native integration (no calendar code in golfops)
+
 ## Data model (minimal)
 
 > Fill in as you implement — start with the nouns from your core flows.
 
 - `activities` — id, title, activity_type, start_time, end_time, location, capacity, participant_count, requires_golfbox_reservation, golfbox_reservation_completed, golfbox_reservation_note, created_at, updated_at
+  - M8 additions: `source` ('manual' | 'acuity', default 'manual'), `acuity_id` (unique, nullable), `client_name`, `client_email`, `client_phone`, `acuity_type_id`, `acuity_calendar`
 - `trainers` — id, name, email, active, created_at
 - `activity_trainers` — activity_id, trainer_id (junction)
 - `knowledge_documents` — id, title, category, content, created_at, updated_at

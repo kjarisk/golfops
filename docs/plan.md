@@ -106,10 +106,10 @@
 
 ### Slice 2 — Availability + create booking
 
-- [ ] `GET /api/acuity/appointment-types`, `/availability/dates`, `/availability/times`
-- [ ] `POST /api/bookings` (create in Acuity → sync back)
-- [ ] New-booking dialog flow (type → date → time → client)
-- [ ] Tests + commit
+- [x] `GET /api/acuity/appointment-types`, `/availability/dates`, `/availability/times`
+- [x] `POST /api/bookings` (create in Acuity → sync back)
+- [x] New-booking dialog flow (type → date → time → client)
+- [x] Tests + commit
 
 ### Slice 3 — Charging: hours-to-invoice report
 

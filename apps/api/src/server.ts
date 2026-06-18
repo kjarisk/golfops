@@ -12,6 +12,7 @@ import { gmailRoutes } from './routes/gmail'
 import { draftRoutes } from './routes/drafts'
 import { reportRoutes } from './routes/reports'
 import { bookingRoutes } from './routes/bookings'
+import { acuityRoutes } from './routes/acuity'
 import { isAcuityConfigured } from './lib/acuity'
 import { syncBookings } from './lib/bookingSync'
 
@@ -49,6 +50,7 @@ await app.register(gmailRoutes)
 await app.register(draftRoutes)
 await app.register(reportRoutes)
 await app.register(bookingRoutes)
+await app.register(acuityRoutes)
 
 // Mirror Acuity bookings into our DB on a poll (Acuity is source of truth).
 // Webhooks would be lower-latency but require a Cloudflare Access bypass; polling is simpler.

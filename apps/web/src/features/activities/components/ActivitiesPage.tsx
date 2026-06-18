@@ -10,6 +10,7 @@ import {
 } from '../api/useActivities'
 import type { Activity, BookingSource } from '../types'
 import { ActivityForm } from './ActivityForm'
+import { NewBookingForm } from './NewBookingForm'
 
 type SourceFilter = 'all' | BookingSource
 
@@ -160,6 +161,7 @@ export function ActivitiesPage() {
   const { data: bookingStatus } = useBookingStatus()
   const sync = useSyncBookings()
   const [formOpen, setFormOpen] = useState(false)
+  const [bookingOpen, setBookingOpen] = useState(false)
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>('all')
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
@@ -202,18 +204,27 @@ export function ActivitiesPage() {
           </div>
           <div className="flex items-center gap-2">
             {bookingStatus?.configured && (
-              <Button
-                variant="outline"
-                onClick={handleSync}
-                disabled={sync.isPending}
-              >
-                {sync.isPending ? 'Syncing…' : 'Sync now'}
-              </Button>
+              <>
+                <Button
+                  variant="outline"
+                  onClick={handleSync}
+                  disabled={sync.isPending}
+                >
+                  {sync.isPending ? 'Syncing…' : 'Sync now'}
+                </Button>
+                <Button variant="outline" onClick={() => setBookingOpen(true)}>
+                  New booking
+                </Button>
+              </>
             )}
             <Button onClick={() => setFormOpen(true)}>Add activity</Button>
           </div>
         </div>
         <ActivityForm open={formOpen} onClose={() => setFormOpen(false)} />
+        <NewBookingForm
+          open={bookingOpen}
+          onClose={() => setBookingOpen(false)}
+        />
 
         <div className="mb-4 flex flex-wrap items-end gap-3">
           <div className="flex flex-col gap-1">

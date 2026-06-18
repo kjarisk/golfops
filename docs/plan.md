@@ -99,10 +99,10 @@
 
 ### Slice 1 — Unified schedule view
 
-- [ ] Extend `GET /api/activities` mapper with new fields
-- [ ] Source badge + client name + source/date-range filter on activities UI
-- [ ] "Sync now" button → `POST /api/bookings/sync`
-- [ ] Tests + commit
+- [x] Extend `GET /api/activities` mapper with new fields (already returns all columns)
+- [x] Source badge + client name + source/date-range filter on activities UI
+- [x] "Sync now" button → `POST /api/bookings/sync`
+- [x] Tests + commit
 
 ### Slice 2 — Availability + create booking
 

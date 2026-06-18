@@ -63,3 +63,31 @@ export function useCreateActivity() {
       queryClient.invalidateQueries({ queryKey: ['activities'] }),
   })
 }
+
+export type BookingStatus = { configured: boolean }
+export type SyncResult = { synced: number; canceled: number }
+
+async function fetchBookingStatus(): Promise<BookingStatus> {
+  const res = await fetch('/api/bookings/status')
+  if (!res.ok) throw new Error('Failed to fetch booking status')
+  return res.json() as Promise<BookingStatus>
+}
+
+export function useBookingStatus() {
+  return useQuery({ queryKey: ['booking-status'], queryFn: fetchBookingStatus })
+}
+
+async function syncBookings(): Promise<SyncResult> {
+  const res = await fetch('/api/bookings/sync', { method: 'POST' })
+  if (!res.ok) throw new Error('Failed to sync bookings')
+  return res.json() as Promise<SyncResult>
+}
+
+export function useSyncBookings() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: syncBookings,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['activities'] }),
+  })
+}

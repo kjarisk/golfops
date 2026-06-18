@@ -3,6 +3,8 @@ export interface Trainer {
   name: string
 }
 
+export type BookingSource = 'manual' | 'acuity'
+
 export interface Activity {
   id: number
   title: string
@@ -16,6 +18,14 @@ export interface Activity {
   golfboxReservationCompleted: boolean
   golfboxReservationNote: string | null
   trainers: Trainer[]
+  // Booking source: 'manual' (created in golfops) or 'acuity' (synced from Acuity).
+  source: BookingSource
+  acuityId: number | null
+  acuityTypeId: number | null
+  acuityCalendar: string | null
+  clientName: string | null
+  clientEmail: string | null
+  clientPhone: string | null
   createdAt: string
   updatedAt: string
 }

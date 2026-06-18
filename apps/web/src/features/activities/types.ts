@@ -18,9 +18,9 @@ export interface Activity {
   golfboxReservationCompleted: boolean
   golfboxReservationNote: string | null
   trainers: Trainer[]
-  // Booking source: 'manual' (created in golfops) or 'acuity' (synced from Acuity).
+  // Booking source: 'manual' (created in golfops) or 'acuity' (synced via Google Calendar).
   source: BookingSource
-  acuityId: number | null
+  externalId: string | null
   acuityTypeId: number | null
   acuityCalendar: string | null
   clientName: string | null

@@ -25,7 +25,7 @@ function makeActivity(over: Partial<Activity>): Activity {
     golfboxReservationNote: null,
     trainers: [],
     source: 'manual',
-    acuityId: null,
+    externalId: null,
     acuityTypeId: null,
     acuityCalendar: null,
     clientName: null,
@@ -44,7 +44,7 @@ const activities: Activity[] = [
     title: 'Private Lesson — Ola Nordmann',
     activityType: 'Private Lesson',
     source: 'acuity',
-    acuityId: 555,
+    externalId: 'gcal-evt-555',
     clientName: 'Ola Nordmann',
   }),
 ]

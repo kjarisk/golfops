@@ -22,8 +22,12 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@golfops-db:5432/golfops
       NODE_ENV: production
       PORT: "3000"
-      ACUITY_USER_ID: ${ACUITY_USER_ID}
-      ACUITY_API_KEY: ${ACUITY_API_KEY}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GMAIL_CALLBACK_URL: ${GMAIL_CALLBACK_URL:-https://golf.kjarisk.com/api/auth/gmail/callback}
+      GOOGLE_BOOKINGS_CALENDAR_ID: ${GOOGLE_BOOKINGS_CALENDAR_ID:-}
+      OLLAMA_URL: ${OLLAMA_URL:-http://host.docker.internal:11434}
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-embeddinggemma:300m}
     depends_on:
       - golfops-db
     networks:

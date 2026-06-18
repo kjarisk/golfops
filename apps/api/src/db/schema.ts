@@ -26,10 +26,13 @@ export const activities = pgTable('activities', {
   golfboxReservationNote: text('golfbox_reservation_note'),
   // Booking source: 'manual' (created in golfops) or 'acuity' (mirrored from Acuity Scheduling).
   source: varchar('source', { length: 20 }).default('manual').notNull(),
-  // Acuity-synced fields (null for manual rows). acuityId is the upsert key.
+  // Synced-booking fields (null for manual rows). externalId is the upsert key —
+  // the Google Calendar event id of an Acuity-synced lesson.
+  externalId: varchar('external_id', { length: 255 }).unique(),
+  acuityCalendar: varchar('acuity_calendar', { length: 255 }),
+  // Deprecated: from the direct-Acuity-API approach (now synced via Google Calendar).
   acuityId: integer('acuity_id').unique(),
   acuityTypeId: integer('acuity_type_id'),
-  acuityCalendar: varchar('acuity_calendar', { length: 255 }),
   clientName: varchar('client_name', { length: 255 }),
   clientEmail: varchar('client_email', { length: 255 }),
   clientPhone: varchar('client_phone', { length: 50 }),

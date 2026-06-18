@@ -25,6 +25,8 @@ export async function gmailRoutes(app: FastifyInstance) {
       scope: [
         'https://www.googleapis.com/auth/gmail.readonly',
         'https://www.googleapis.com/auth/gmail.send',
+        // Read-only access to the Google Calendar that Acuity syncs bookings into.
+        'https://www.googleapis.com/auth/calendar.readonly',
       ],
       prompt: 'consent',
     })

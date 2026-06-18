@@ -43,6 +43,13 @@
       "when": 1781774920033,
       "tag": "0005_naive_jack_flag",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1781778940803,
+      "tag": "0006_fine_stephen_strange",
+      "breakpoints": true
     }
   ]
 }

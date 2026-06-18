@@ -82,19 +82,24 @@
 - [x] Frontend: debounced search box + ranked results UI on KnowledgePage
 - [x] Lint + build + tests green, commit
 
-## Milestone 8 — Acuity booking integration (operations core)
+## Milestone 8 — Booking integration via Google Calendar (operations core)
 
-> Acuity is source of truth; mirror into our DB. One booking system: synced lessons become
-> `activities` rows with `source='acuity'` (additive — manual rows unchanged). Charging = hours
-> to invoice the club, not customer payments. Google Calendar via Acuity's native sync.
+> Acuity's direct API needs the paid Powerhouse plan, so instead golfops reads bookings from a
+> **dedicated Google Calendar** that Acuity syncs into (Acuity → Sync with other Calendars, on all
+> paid plans). One booking system: synced lessons become `activities` rows with `source='acuity'`
+> (additive — manual rows unchanged), keyed by the calendar event id (`externalId`). Charging = hours
+> to invoice the club, not customer payments.
+>
+> Tradeoff vs the API: no booking-from-golfops and no availability lookup (both need the Acuity API);
+> activity type is best-effort parsed from the event title.
 
-### Slice 0 — Foundation: Acuity client + sync
+### Slice 0 — Foundation: calendar sync
 
-- [x] `lib/acuity.ts` — typed Acuity client (Basic Auth via `ACUITY_USER_ID`/`ACUITY_API_KEY`)
-- [x] Migration 0005 — extend `activities`: `source`, `acuityId` (unique), client fields, `acuityTypeId`, `acuityCalendar`
-- [x] `lib/bookingSync.ts` — `syncBookings()` upsert appointments by `acuityId`
-- [x] `POST /api/bookings/sync` + ~5-min `setInterval` poll in `server.ts`
-- [x] `.env.example` + `compose.yml` Acuity vars
+- [x] Migration 0005/0006 — extend `activities`: `source`, `externalId` (unique), client fields, `acuityCalendar`
+- [x] `lib/calendarBookings.ts` — `syncBookings()` reads Acuity-synced Google Calendar, upserts by `externalId`, reconciles cancellations
+- [x] `calendar.readonly` scope added to Gmail OAuth
+- [x] `POST /api/bookings/sync` + `/status` + ~5-min `setInterval` poll in `server.ts`
+- [x] `.env.example` + `compose.yml` (`GOOGLE_BOOKINGS_CALENDAR_ID`) + Google OAuth vars in compose
 - [x] Tests + commit
 
 ### Slice 1 — Unified schedule view
@@ -104,12 +109,10 @@
 - [x] "Sync now" button → `POST /api/bookings/sync`
 - [x] Tests + commit
 
-### Slice 2 — Availability + create booking
+### ~~Slice 2 — Availability + create booking~~ (dropped — needs Acuity Powerhouse API)
 
-- [x] `GET /api/acuity/appointment-types`, `/availability/dates`, `/availability/times`
-- [x] `POST /api/bookings` (create in Acuity → sync back)
-- [x] New-booking dialog flow (type → date → time → client)
-- [x] Tests + commit
+- Reverted: built against the Acuity API, then removed when we chose the free Google-Calendar route.
+  Booking creation + availability lookup are not possible without the paid API.
 
 ### Slice 3 — Charging: hours-to-invoice report
 

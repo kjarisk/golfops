@@ -23,7 +23,7 @@ export const BookingSchema = z.object({
   endTime: z.string().nullable(),
   location: z.string().nullable(),
   source: BookingSourceSchema,
-  acuityId: z.number().int().nullable(),
+  externalId: z.string().nullable(),
   acuityTypeId: z.number().int().nullable(),
   acuityCalendar: z.string().nullable(),
   clientName: z.string().nullable(),

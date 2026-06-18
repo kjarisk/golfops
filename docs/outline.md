@@ -45,13 +45,14 @@ One internal user: Kjartan. Not a public application. Access protected by Cloudf
 
 ## Core flows (Release 2 — Milestone 8: Acuity bookings)
 
-7. **Bookings** — Acuity Scheduling is the source of truth for client lesson bookings; golfops mirrors
-   appointments into the `activities` table (`source='acuity'`) so there is **one booking system**.
+7. **Bookings** — Acuity Scheduling is the source of truth for client lesson bookings. Since Acuity's
+   direct API requires the paid Powerhouse plan, golfops reads bookings from a **dedicated Google
+   Calendar** that Acuity syncs into (Acuity → Sync with other Calendars). Lessons are mirrored into the
+   `activities` table (`source='acuity'`, keyed by calendar event id) so there is **one booking system**.
    - See all bookings alongside manual activities (unified schedule, source badge + filter)
-   - Book a lesson from golfops: pick appointment type → see availability → create in Acuity
    - **Charging:** date-range report of Kjartan's lesson hours (to invoice the club), with CSV export.
      Clients pay the club directly — golfops never tracks customer payments.
-   - Google Calendar sync handled by Acuity's native integration (no calendar code in golfops)
+   - Out of scope (need the paid Acuity API): booking from golfops, availability lookup.
 
 ## Data model (minimal)
 
